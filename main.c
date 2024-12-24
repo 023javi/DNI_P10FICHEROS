@@ -15,6 +15,11 @@ struct ALUMNO {
     DATE nac;
 };
 
+const char nombres[8][10+1]={"jose","roberto","fernando","mario",
+"sandra", "raquel", "isabel", "pilar"};
+const char apellidos[8][10+1]={"garcia", "hernandez", "gutierrez",
+"gomez", "fernandez", "lopez", "sanchez", "perez" };
+
 void print_DATE(DATE );
 void print_ALUMNO (struct ALUMNO);
 void rand_DATE(DATE  *);
