@@ -102,8 +102,30 @@ void rand_ALUMNO(struct ALUMNO *alumno) {
     rand_DATE(&alumno->nac); // Generar la fecha de nacimiento aleatoria
 }
 
+void fprint_ALUMNO (FILE *file, struct ALUMNO alumno) {
+    fprintf(file, "%-10s\t%-20s\t%d-%d-%d\n", alumno.DNI,
+        alumno.nom_comp, alumno.nac.dia, alumno.nac.mes, alumno.nac.anyo);
+}
 
 int main(void)
 {
+    struct ALUMNO alumno[A];
+    printf("Generandose datos aleatorios...\n");
+    for (int i = 0; i < A; i++) {
+        rand_ALUMNO(&alumno[i]);
+        print_ALUMNO(alumno[i]);
+    }
+
+    printf("Generandose fichero de texto...\n");
+    FILE *file = fopen("alum.txt", "a");
+    if (file == NULL) {
+        printf("Error al abrir el archivo\n");
+        return 0;
+    }
+
+    for (int i = 0; i < A; i++) {
+        fprint_ALUMNO(file, alumno[i]);
+    }
+
     return 0;
 }
