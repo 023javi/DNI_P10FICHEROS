@@ -103,8 +103,12 @@ void rand_ALUMNO(struct ALUMNO *alumno) {
 }
 
 void fprint_ALUMNO (FILE *file, struct ALUMNO alumno) {
-    fprintf(file, "%-10s\t%-20s\t%d-%d-%d\n", alumno.DNI,
-        alumno.nom_comp, alumno.nac.dia, alumno.nac.mes, alumno.nac.anyo);
+    fprintf(file, "%-10s\t%-20s\t", alumno.DNI, alumno.nom_comp);
+    fprint_DATE(file, alumno.nac);
+}
+
+void fprint_DATE(FILE *file, DATE fecha) {
+    fprintf(file, "%d-%d-%d\n", fecha.dia, fecha.mes, fecha.anyo);
 }
 
 int main(void)
