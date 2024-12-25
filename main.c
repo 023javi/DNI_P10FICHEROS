@@ -111,16 +111,36 @@ void fprint_DATE(FILE *file, DATE fecha) {
     fprintf(file, "%d-%d-%d\n", fecha.dia, fecha.mes, fecha.anyo);
 }
 
+void all_swap(struct ALUMNO *alumno1, struct ALUMNO *alumno2) {
+    struct ALUMNO temp = *alumno1;
+    *alumno1 = *alumno2;
+    *alumno2 = temp;
+}
+
+void vaciarbuffer(struct ALUMNO *alumno) {
+        alumno->nom_comp[0] = '\0';
+        alumno->DNI[0] = '\0';
+        alumno->nac.dia = 0;
+        alumno->nac.mes = 0;
+        alumno->nac.anyo = 0;
+}
+
+
+
 int main(void)
 {
     struct ALUMNO alumno[A];
+    for (int i = 0; i < A; i++) {
+        vaciarbuffer(&alumno[i]);
+
+    }
     printf("Generandose datos aleatorios...\n");
     for (int i = 0; i < A; i++) {
         rand_ALUMNO(&alumno[i]);
         print_ALUMNO(alumno[i]);
     }
 
-    printf("Generandose fichero de texto...\n");
+    printf("Generandose fichero de texto...\n\n");
     FILE *file = fopen("alum.txt", "a");
     if (file == NULL) {
         printf("Error al abrir el archivo\n");
@@ -129,6 +149,37 @@ int main(void)
 
     for (int i = 0; i < A; i++) {
         fprint_ALUMNO(file, alumno[i]);
+    }
+    fclose(file);
+
+
+    printf("Generandose fichero binario...\n\n");
+    FILE *filebinary = fopen("alum.bin", "wb");
+    if (filebinary == NULL) {
+        printf("Error al abrir el archivo binario\n");
+        return 0;
+    }
+    fwrite(alumno, sizeof(struct ALUMNO), A, filebinary);
+    fclose(filebinary);
+
+    filebinary = fopen("alum.bin", "rb");
+    if (filebinary == NULL) {
+        printf("Error al abrir el archivo binario\n");
+        return 0;
+    }
+    struct ALUMNO alumnobin[A];
+    fread(alumnobin, sizeof(struct ALUMNO), A, filebinary);
+    fclose(filebinary);
+
+    printf("anyo a buscar en los datos del ficero binario?\n");
+    char anyo_buscar[10];
+    gets(anyo_buscar);
+    unsigned anyo = atoi(anyo_buscar);
+
+    for (int i = 0; i < A; i++) {
+        if (alumnobin[i].nac.anyo == anyo) {
+            print_ALUMNO(alumnobin[i]);
+        }
     }
 
     return 0;
