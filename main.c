@@ -117,6 +117,24 @@ void all_swap(struct ALUMNO *alumno1, struct ALUMNO *alumno2) {
     *alumno2 = temp;
 }
 
+void all_bubbleSort(struct ALUMNO *alumno[A], unsigned type) {
+    int i, j;
+    unsigned swap = 0;
+    for (i = 0; i < A; i++) {
+        swap = 0;
+        for (j = 0; j < A - i - 1; j++) {
+            if (type == 1) {
+                if (alumno[j]->DNI > alumno[j + 1]->DNI) {
+                    all_swap(alumno[j], alumno[j + 1]);
+                }
+            }else if (type == 2) {
+                if (alumno[j]->nom_comp > alumno[j + 1]->nom_comp) {
+                    all_swap(alumno[j], alumno[j + 1]);
+                }
+            }
+        }
+    }
+}
 void vaciarbuffer(struct ALUMNO *alumno) {
         alumno->nom_comp[0] = '\0';
         alumno->DNI[0] = '\0';
