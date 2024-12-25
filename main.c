@@ -117,19 +117,19 @@ void all_swap(struct ALUMNO *alumno1, struct ALUMNO *alumno2) {
     *alumno2 = temp;
 }
 
-void all_bubbleSort(struct ALUMNO *alumno[A], unsigned type) {
+void all_bubbleSort(struct ALUMNO alumno[A], unsigned type) {
     int i, j;
     unsigned swap = 0;
     for (i = 0; i < A; i++) {
         swap = 0;
         for (j = 0; j < A - i - 1; j++) {
             if (type == 1) {
-                if (alumno[j]->DNI > alumno[j + 1]->DNI) {
-                    all_swap(alumno[j], alumno[j + 1]);
+                if (strcmp(alumno[j].DNI, alumno[j + 1].DNI) > 0) {
+                    all_swap(&alumno[j], &alumno[j + 1]);
                 }
             }else if (type == 2) {
-                if (alumno[j]->nom_comp > alumno[j + 1]->nom_comp) {
-                    all_swap(alumno[j], alumno[j + 1]);
+                if (strcmp(alumno[j].nom_comp, alumno[j + 1].nom_comp) > 0) {
+                    all_swap(&alumno[j], &alumno[j + 1]);
                 }
             }
         }
@@ -199,6 +199,49 @@ int main(void)
             print_ALUMNO(alumnobin[i]);
         }
     }
+    fclose(filebinary);
 
+    printf("Generar fichero de texto con datos ordenados por dni (1) o por "
+           "nombre completo (2) ?\n\n");
+
+    char types[2];
+    gets(types);
+    unsigned type = atoi(types);
+    fflush(stdin);
+    FILE *f_ordenado = fopen("alum_sort.txt", "w");
+    if (f_ordenado == NULL) {
+        printf("Error al abrir el archivo ordenado\n");
+        return 0;
+    }
+
+    all_bubbleSort(alumno, type);
+
+    if (type == 1) {
+        printf("DNI completo a buscar en los datos del fichero ordenado de texto ? ");
+    }else if (type == 2) {
+        printf("Nombre completo a buscar en los datos del fichero ordenado de texto ?\n\n");
+    }
+    char nombre_buscar[20];
+    gets(nombre_buscar);
+
+    for (int i = 0; i < A; i++) {
+        fprint_ALUMNO(f_ordenado, alumno[i]);
+    }
+
+    fclose(f_ordenado);
+
+    FILE *file_ordenado = fopen("alum_sort.txt", "r");
+    if (file_ordenado == NULL) {
+        printf("Error al abrir el archivo ordenado\n");
+        return 0;
+    }
+
+    char nombre_buscar2[100];
+    while (fgets(nombre_buscar2, 100, file_ordenado)) {
+        if (strstr(nombre_buscar2, nombre_buscar) != NULL) {
+            printf("%s", nombre_buscar2);
+        }
+    }
+    fclose(file_ordenado);
     return 0;
 }
